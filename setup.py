@@ -15,12 +15,10 @@ Operating System :: Microsoft :: Windows
 Operating System :: Unix
 """
 
-try:
-    from setuptools import setup
-    from setuptools.extension import Extension
-except ImportError:
-    from distutils.core import setup
-    from distutils.extension import Extension
+from edxl import __version__
+import ez_setup
+ez_setup.use_setuptools()
+from setuptools import setup,find_packages
 import sys
 
 if sys.version_info < (2,3):
@@ -30,18 +28,26 @@ if sys.version_info < (2,3):
             del kwargs['classifiers']
         _setup(**kwargs)
 
-doclines = __doc__.split('\n')
-
 setup(name='pyedxl',
-      version='0.1',
+      version=__version__,
+      packages=find_packages(exclude=['*.tests','*.tests.*','tests.*','tests']),
+
+      install_requires=['lxml>=1.0.3',
+                        'python-dateutil'],
+
+      author='Sugree Phatanapherom',
+      author_email='sugree@gmail.com',
+      description='Python library for handling OASIS EDXL',
+      license='LGPL',
+      keywords='edxl',
+      url='http://code.google.com/p/py-edxl',
+      long_description='''\
+Python library for handling OASIS Emergency Data Exchange Language (EDXL)
+Distribution Element that provides a collection of modules for manipulating
+OASIS Emergency Data Exchange Language (EDXL) Distribution Element''',
+
       maintainer='Sugree Phatanapherom',
       maintainer_email='sugree@gmail.com',
-      url='http://code.google.com/p/py-edxl',
-      license='http://www.gnu.org/licenses/lgpl.txt',
       platforms=['any'],
-      description=doclines[0],
       classifiers=filter(None,classifiers.split('\n')),
-      long_description='\n'.join(doclines[2:]),
-      packages=['edxl'],
-      install_requires=['lxml'],
      )
